@@ -1,6 +1,6 @@
-const { Number, Boolean, Add, Multiply, LessThan, Variable, DoNothing } = require('./simple/simple')
-const Machine = require('./simple/machine')
-const consolex = require('./utils/consolex')
+import { Number, Boolean, Add, Multiply, LessThan, Variable, DoNothing } from './simple/simple'
+import Machine from './simple/machine'
+import * as consolex from './utils/consolex'
 
 let machine = new Machine(
   new Add(

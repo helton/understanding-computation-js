@@ -1,6 +1,6 @@
-const Struct = require('../metaprogramming/struct')
-const { InspectMixin } = require('../metaprogramming/mixins')
-const { Number, Boolean } = require('./primitives')
+import Struct from '../metaprogramming/struct'
+import { InspectMixin } from '../metaprogramming/mixins'
+import { Number, Boolean } from './primitives'
 
 class Add extends InspectMixin(Struct('left', 'right')) {
   toString() {
@@ -60,4 +60,4 @@ class LessThan extends InspectMixin(Struct('left', 'right')) {
 
 }
 
-module.exports = { Add, Multiply, LessThan }
+export { Add, Multiply, LessThan }

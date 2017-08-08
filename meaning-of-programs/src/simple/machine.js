@@ -1,4 +1,4 @@
-const Struct = require('../metaprogramming/struct')
+import Struct from '../metaprogramming/struct'
 
 class Machine extends Struct('expression', 'environment') {
   step() {
@@ -14,4 +14,4 @@ class Machine extends Struct('expression', 'environment') {
   }
 }
 
-module.exports = Machine
+export default Machine

@@ -4,4 +4,4 @@ const InspectMixin = BaseClass => class extends BaseClass {
   }
 }
 
-module.exports = { InspectMixin }
+export { InspectMixin }

@@ -41,4 +41,4 @@ const Struct = (...params) => class {
 
 }
 
-module.exports = Struct
+export default Struct

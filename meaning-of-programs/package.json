@@ -1,0 +1,18 @@
+{
+  "name": "meaning-of-programs",
+  "version": "1.0.0",
+  "main": "dist/bundle.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack",
+    "watch": "yarn build -- --watch",
+    "execute": "node $npm_package_main"
+  },
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-env": "^1.6.0",
+    "webpack": "^3.5.1"
+  }
+}
