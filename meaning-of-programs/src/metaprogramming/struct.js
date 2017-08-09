@@ -1,44 +1,43 @@
+import { objectToString } from '../utils/utils'
+
 const Struct = (...params) => class {
-  constructor(...args) {
-    for (let i = 0; i < params.length; i++)
+  constructor (...args) {
+    for (let i = 0; i < params.length; i++) {
       this[params[i]] = args[i]
+    }
   }
 
-  toString() {
-    const properties = this.members()
-      .map(name => `${name}: ${this[name]}`)
-      .join(", ")
-    return `{ ${this.constructor.name} [ ${properties} ] }`
+  toString () {
+    return `[ ${this.constructor.name} ${objectToString(this)} ]`
   }
 
-  inspect() {
+  inspect () {
     return this.toString()
   }
 
-  toArray() {
+  toArray () {
     return this.members().map(name => this[name])
   }
 
-  values() {
+  values () {
     return this.toArray()
   }
 
-  members() {
+  members () {
     return params
   }
 
-  length() {
+  length () {
     return this.size()
   }
 
-  size() {
+  size () {
     return params.length
   }
 
-  eachPair(fn) {
+  eachPair (fn) {
     this.members().forEach(name => fn(name, this[name]))
   }
-
 }
 
 export default Struct

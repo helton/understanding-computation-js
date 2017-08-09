@@ -1,5 +1,5 @@
 const InspectMixin = BaseClass => class extends BaseClass {
-  inspect() {
+  inspect () {
     return `« ${this.toString()} »`
   }
 }

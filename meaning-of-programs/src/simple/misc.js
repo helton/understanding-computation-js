@@ -2,15 +2,15 @@ import Struct from '../metaprogramming/struct'
 import { InspectMixin } from '../metaprogramming/mixins'
 
 class Variable extends InspectMixin(Struct('name')) {
-  toString() {
+  toString () {
     return this.name
   }
 
-  isReducible() {
+  isReducible () {
     return true
   }
 
-  reduce(environment) {
+  reduce (environment) {
     return environment[this.name]
   }
 }

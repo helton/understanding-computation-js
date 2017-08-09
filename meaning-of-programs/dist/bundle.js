@@ -76,6 +76,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _utils = __webpack_require__(10);
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Struct = function Struct() {
@@ -97,56 +99,51 @@ var Struct = function Struct() {
     }
 
     _createClass(_class, [{
-      key: "toString",
+      key: 'toString',
       value: function toString() {
-        var _this = this;
-
-        var properties = this.members().map(function (name) {
-          return name + ": " + _this[name];
-        }).join(", ");
-        return "{ " + this.constructor.name + " [ " + properties + " ] }";
+        return '[ ' + this.constructor.name + ' ' + (0, _utils.objectToString)(this) + ' ]';
       }
     }, {
-      key: "inspect",
+      key: 'inspect',
       value: function inspect() {
         return this.toString();
       }
     }, {
-      key: "toArray",
+      key: 'toArray',
       value: function toArray() {
-        var _this2 = this;
+        var _this = this;
 
         return this.members().map(function (name) {
-          return _this2[name];
+          return _this[name];
         });
       }
     }, {
-      key: "values",
+      key: 'values',
       value: function values() {
         return this.toArray();
       }
     }, {
-      key: "members",
+      key: 'members',
       value: function members() {
         return params;
       }
     }, {
-      key: "length",
+      key: 'length',
       value: function length() {
         return this.size();
       }
     }, {
-      key: "size",
+      key: 'size',
       value: function size() {
         return params.length;
       }
     }, {
-      key: "eachPair",
+      key: 'eachPair',
       value: function eachPair(fn) {
-        var _this3 = this;
+        var _this2 = this;
 
         this.members().forEach(function (name) {
-          return fn(name, _this3[name]);
+          return fn(name, _this2[name]);
         });
       }
     }]);
@@ -272,6 +269,23 @@ var Boolean = function (_Primitive2) {
     return _possibleConstructorReturn(this, (Boolean.__proto__ || Object.getPrototypeOf(Boolean)).apply(this, arguments));
   }
 
+  _createClass(Boolean, null, [{
+    key: 'areSame',
+    value: function areSame(left, right) {
+      return left.value === right.value;
+    }
+  }, {
+    key: 'isTrue',
+    value: function isTrue(otherBoolean) {
+      return this.areSame(new Boolean(true), otherBoolean);
+    }
+  }, {
+    key: 'isFalse',
+    value: function isFalse(otherBoolean) {
+      return !this.isTrue(otherBoolean);
+    }
+  }]);
+
   return Boolean;
 }(Primitive);
 
@@ -287,6 +301,8 @@ exports.Boolean = Boolean;
 
 var _simple = __webpack_require__(4);
 
+var Simple = _interopRequireWildcard(_simple);
+
 var _machine = __webpack_require__(8);
 
 var _machine2 = _interopRequireDefault(_machine);
@@ -295,18 +311,58 @@ var _consolex = __webpack_require__(9);
 
 var consolex = _interopRequireWildcard(_consolex);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var machine = new _machine2.default(new _simple.Add(new _simple.Multiply(new _simple.Number(1), new _simple.Number(2)), new _simple.Multiply(new _simple.Number(3), new _simple.Number(4))), {});
-machine.run(consolex.log);
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-machine = new _machine2.default(new _simple.LessThan(new _simple.Number(5), new _simple.Add(new _simple.Number(2), new _simple.Number(2))), {});
-machine.run(consolex.log);
+// new Machine(
+//   new Simple.Assign(
+//     'x',
+//     new Simple.Add(
+//       new Simple.Variable('x'),
+//       new Simple.Number(1)
+//     )
+//   ),
+//   { 'x': new Simple.Number(2) }
+// ).run(consolex.log)
 
-machine = new _machine2.default(new _simple.Add(new _simple.Variable('x'), new _simple.Variable('y')), { x: new _simple.Number(3), y: new _simple.Number(4) });
-machine.run(consolex.log);
+// new Machine(
+//   new Simple.If(
+//     new Simple.Variable('x'),
+//     new Simple.Assign(
+//       new Simple.Variable('y'),
+//       new Simple.Number(1)
+//     ),
+//     new Simple.DoNothing()
+//   ),
+//   {
+//     'x': new Simple.Boolean(false)
+//   }
+// ).run(consolex.log)
+
+// new Machine(
+//   new Simple.Sequence(
+//     new Simple.Assign(
+//       'x',
+//       new Simple.Add(
+//         new Simple.Number(1),
+//         new Simple.Number(1)
+//       )
+//     ),
+//     new Simple.Assign(
+//       'y',
+//       new Simple.Add(
+//         new Simple.Variable('x'),
+//         new Simple.Number(3)
+//       )
+//     )
+//   )
+//   , {}
+// ).run(consolex.log)
+
+new _machine2.default(new Simple.While(new Simple.LessThan(new Simple.Variable('x'), new Simple.Number(5)), new Simple.Assign('x', new Simple.Add(new Simple.Variable('x'), new Simple.Number(1)))), {
+  'x': new Simple.Number(0)
+}).run(consolex.log);
 
 /***/ }),
 /* 4 */
@@ -371,7 +427,13 @@ var Add = function (_InspectMixin) {
   }, {
     key: 'reduce',
     value: function reduce(environment) {
-      if (this.left.isReducible()) return new Add(this.left.reduce(environment), this.right);else if (this.right.isReducible()) return new Add(this.left, this.right.reduce(environment));else return new _primitives.Number(this.left + this.right);
+      if (this.left.isReducible()) {
+        return new Add(this.left.reduce(environment), this.right);
+      } else if (this.right.isReducible()) {
+        return new Add(this.left, this.right.reduce(environment));
+      } else {
+        return new _primitives.Number(this.left + this.right); // eslint-disable-line
+      }
     }
   }]);
 
@@ -400,7 +462,13 @@ var Multiply = function (_InspectMixin2) {
   }, {
     key: 'reduce',
     value: function reduce(environment) {
-      if (this.left.isReducible()) return new Multiply(this.left.reduce(environment), this.right);else if (this.right.isReducible()) return new Multiply(this.left, this.right.reduce(environment));else return new _primitives.Number(this.left * this.right);
+      if (this.left.isReducible()) {
+        return new Multiply(this.left.reduce(environment), this.right);
+      } else if (this.right.isReducible()) {
+        return new Multiply(this.left, this.right.reduce(environment));
+      } else {
+        return new _primitives.Number(this.left * this.right); // eslint-disable-line
+      }
     }
   }]);
 
@@ -429,7 +497,13 @@ var LessThan = function (_InspectMixin3) {
   }, {
     key: 'reduce',
     value: function reduce(environment) {
-      if (this.left.isReducible()) return new LessThan(this.left.reduce(environment), this.right);else if (this.right.isReducible()) return new LessThan(this.left, this.right.reduce(environment));else return new _primitives.Boolean(this.left < this.right);
+      if (this.left.isReducible()) {
+        return new LessThan(this.left.reduce(environment), this.right);
+      } else if (this.right.isReducible()) {
+        return new LessThan(this.left, this.right.reduce(environment));
+      } else {
+        return new _primitives.Boolean(this.left < this.right); // eslint-disable-line
+      }
     }
   }]);
 
@@ -450,7 +524,9 @@ exports.LessThan = LessThan;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.DoNothing = undefined;
+exports.While = exports.Sequence = exports.If = exports.Assign = exports.DoNothing = undefined;
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -460,7 +536,11 @@ var _struct2 = _interopRequireDefault(_struct);
 
 var _mixins = __webpack_require__(1);
 
+var _primitives = __webpack_require__(2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -480,7 +560,7 @@ var DoNothing = function (_InspectMixin) {
   _createClass(DoNothing, [{
     key: 'toString',
     value: function toString() {
-      return this.value;
+      return 'do-nothing';
     }
   }, {
     key: 'isReducible',
@@ -490,9 +570,150 @@ var DoNothing = function (_InspectMixin) {
   }]);
 
   return DoNothing;
-}((0, _mixins.InspectMixin)((0, _struct2.default)('value')));
+}((0, _mixins.InspectMixin)((0, _struct2.default)()));
+
+var Assign = function (_InspectMixin2) {
+  _inherits(Assign, _InspectMixin2);
+
+  function Assign() {
+    _classCallCheck(this, Assign);
+
+    return _possibleConstructorReturn(this, (Assign.__proto__ || Object.getPrototypeOf(Assign)).apply(this, arguments));
+  }
+
+  _createClass(Assign, [{
+    key: 'toString',
+    value: function toString() {
+      return this.name + ' = ' + this.expression;
+    }
+  }, {
+    key: 'isReducible',
+    value: function isReducible() {
+      return true;
+    }
+  }, {
+    key: 'reduce',
+    value: function reduce(environment) {
+      if (this.expression.isReducible()) {
+        return [new Assign(this.name, this.expression.reduce(environment)), environment];
+      } else {
+        return [new DoNothing(), Object.assign(environment, _defineProperty({}, this.name, this.expression))];
+      }
+    }
+  }]);
+
+  return Assign;
+}((0, _mixins.InspectMixin)((0, _struct2.default)('name', 'expression')));
+
+var If = function (_InspectMixin3) {
+  _inherits(If, _InspectMixin3);
+
+  function If() {
+    _classCallCheck(this, If);
+
+    return _possibleConstructorReturn(this, (If.__proto__ || Object.getPrototypeOf(If)).apply(this, arguments));
+  }
+
+  _createClass(If, [{
+    key: 'toString',
+    value: function toString() {
+      return 'if (' + this.condition + ') { ' + this.consequence + ' } else { ' + this.alternative + ' }';
+    }
+  }, {
+    key: 'isReducible',
+    value: function isReducible() {
+      return true;
+    }
+  }, {
+    key: 'reduce',
+    value: function reduce(environment) {
+      if (this.condition.isReducible()) {
+        return [new If(this.condition.reduce(environment), this.consequence, this.alternative), environment];
+      } else {
+        if (_primitives.Boolean.isTrue(this.condition)) {
+          return [this.consequence, environment];
+        } else {
+          return [this.alternative, environment];
+        }
+      }
+    }
+  }]);
+
+  return If;
+}((0, _mixins.InspectMixin)((0, _struct2.default)('condition', 'consequence', 'alternative')));
+
+var Sequence = function (_InspectMixin4) {
+  _inherits(Sequence, _InspectMixin4);
+
+  function Sequence() {
+    _classCallCheck(this, Sequence);
+
+    return _possibleConstructorReturn(this, (Sequence.__proto__ || Object.getPrototypeOf(Sequence)).apply(this, arguments));
+  }
+
+  _createClass(Sequence, [{
+    key: 'toString',
+    value: function toString() {
+      return this.first + '; ' + this.second;
+    }
+  }, {
+    key: 'isReducible',
+    value: function isReducible() {
+      return true;
+    }
+  }, {
+    key: 'reduce',
+    value: function reduce(environment) {
+      if (this.first instanceof DoNothing) {
+        return [this.second, environment];
+      } else {
+        var _first$reduce = this.first.reduce(environment),
+            _first$reduce2 = _slicedToArray(_first$reduce, 2),
+            reducedFirst = _first$reduce2[0],
+            reducedEnvironment = _first$reduce2[1];
+
+        return [new Sequence(reducedFirst, this.second), reducedEnvironment];
+      }
+    }
+  }]);
+
+  return Sequence;
+}((0, _mixins.InspectMixin)((0, _struct2.default)('first', 'second')));
+
+var While = function (_InspectMixin5) {
+  _inherits(While, _InspectMixin5);
+
+  function While() {
+    _classCallCheck(this, While);
+
+    return _possibleConstructorReturn(this, (While.__proto__ || Object.getPrototypeOf(While)).apply(this, arguments));
+  }
+
+  _createClass(While, [{
+    key: 'toString',
+    value: function toString() {
+      return 'while (' + this.condition + ') { ' + this.body + ' }';
+    }
+  }, {
+    key: 'isReducible',
+    value: function isReducible() {
+      return true;
+    }
+  }, {
+    key: 'reduce',
+    value: function reduce(environment) {
+      return [new If(this.condition, new Sequence(this.body, this), new DoNothing(), environment), environment];
+    }
+  }]);
+
+  return While;
+}((0, _mixins.InspectMixin)((0, _struct2.default)('condition', 'body')));
 
 exports.DoNothing = DoNothing;
+exports.Assign = Assign;
+exports.If = If;
+exports.Sequence = Sequence;
+exports.While = While;
 
 /***/ }),
 /* 7 */
@@ -564,11 +785,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _struct = __webpack_require__(0);
 
 var _struct2 = _interopRequireDefault(_struct);
+
+var _utils = __webpack_require__(10);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -590,21 +815,31 @@ var Machine = function (_Struct) {
   _createClass(Machine, [{
     key: 'step',
     value: function step() {
-      this.expression = this.expression.reduce(this.environment);
+      var _statement$reduce = this.statement.reduce(this.environment);
+
+      var _statement$reduce2 = _slicedToArray(_statement$reduce, 2);
+
+      this.statement = _statement$reduce2[0];
+      this.environment = _statement$reduce2[1];
     }
   }, {
     key: 'run',
     value: function run(callback) {
-      while (this.expression.isReducible()) {
-        callback(this.expression);
+      while (this.statement.isReducible()) {
+        this.showStep(callback);
         this.step();
       }
-      callback(this.expression);
+      this.showStep(callback);
+    }
+  }, {
+    key: 'showStep',
+    value: function showStep(callback) {
+      callback('> ' + this.statement + '\nENV: ' + (0, _utils.objectToString)(this.environment) + '\n');
     }
   }]);
 
   return Machine;
-}((0, _struct2.default)('expression', 'environment'));
+}((0, _struct2.default)('statement', 'environment'));
 
 exports.default = Machine;
 
@@ -629,6 +864,25 @@ var log = function log() {
 };
 
 exports.log = log;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var objectToString = function objectToString(object) {
+  var properties = Object.getOwnPropertyNames(object).map(function (name) {
+    return name + ' => ' + object[name];
+  }).join(', ');
+  return '{ ' + properties + ' }';
+};
+
+exports.objectToString = objectToString;
 
 /***/ })
 /******/ ]);
