@@ -57,5 +57,12 @@ typings/
 # dotenv environment variables file
 .env
 
+###################
+# Custom settings #
+###################
+
 # vscode
 .vscode/
+
+# build
+dist/
